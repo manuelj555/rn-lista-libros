@@ -17,7 +17,7 @@ export default function ReadingBook({ book, position = 0, isSelected, handleSele
 
   useEffect(() => {
     Animated.spring(scaleAnimation.current, {
-      toValue: isSelected ? 1 : 1 - (position * 0.04),
+      toValue: isSelected ? 1.05 : 1 - (position * 0.04),
       duration: 600,
       useNativeDriver: false,
     }).start()
@@ -50,9 +50,19 @@ export default function ReadingBook({ book, position = 0, isSelected, handleSele
     }
   }
 
+  function handleSelectBook() {
+    handleSelect(isSelected ? null : book)
+  }
+
   return (
-    <Animated.View style={[styles.container, position > 0 && { height: heightAnimation.current }, scaleStyles]}>
-      <Pressable onPress={() => handleSelect(book)}>
+    <Animated.View
+      style={[
+        styles.container,
+        position > 0 && { height: heightAnimation.current },
+        scaleStyles
+      ]}
+    >
+      <Pressable onPress={handleSelectBook} style={{ elevation: 20, padding: 5 }}>
         <Image resizeMode='cover' src={book.cover} style={[styles.image]} />
       </Pressable>
       <Pressable style={styles.removeButton} onPress={removeFromReadingList}>
@@ -64,12 +74,13 @@ export default function ReadingBook({ book, position = 0, isSelected, handleSele
 
 const styles = StyleSheet.create({
   container: {
-    paddingX: 20,
+    alignSelf: 'center',
     alignItems: 'center',
     flexDirection: 'column',
     position: 'relative',
-    // borderColor: 'red',
-    // borderWidth: 2,
+    width: 300,
+    margin: 'auto',
+    // borderWidth: 1,
   },
   image: {
     width: 300,
@@ -80,13 +91,13 @@ const styles = StyleSheet.create({
   removeButton: {
     zIndex: 10,
     position: 'absolute',
-    top: 5,
-    right: 50,
+    top: 10,
+    right: 10,
     borderWidth: 2,
     borderColor: '#78504d',
     borderRadius: 4,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
     backgroundColor: '#66666622',
   }
 })

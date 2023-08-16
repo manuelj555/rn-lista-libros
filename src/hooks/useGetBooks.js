@@ -5,7 +5,6 @@ import { useGetReadingList } from "./useGetReadingList"
 export function useGetBooks() {
   const { data: books } = useQuery(['books'], () => getBooks(), { suspense: true })
   const { readingList } = useGetReadingList()
-  console.log(readingList)
 
   const filteredBooks = books.filter(book => !readingList.some(reading => reading.title === book.title))
 

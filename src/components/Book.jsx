@@ -1,19 +1,25 @@
-import React from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
+import React, { useRef } from 'react'
+import { Animated, Image, StyleSheet, Text, View } from 'react-native'
 import { useBook } from '../hooks/useBook'
 import { Button } from './ui/Button'
 import Title from './ui/Title'
-import { router } from 'expo-router'
 
 export default function Book({ book }) {
   const { add } = useBook()
+  const sizeAnimation = useRef(new Animated.Value(0)).current
 
   function addToReadingList() {
-    add(book)
+    Animated.timing(sizeAnimation, {
+      toValue: -800,
+      duration: 400,
+      useNativeDriver: false,
+    }).start(() => {
+      add(book)
+    })
   }
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, { transform: [{ translateX: sizeAnimation }] }]}>
       <Title size='sm'>{book.title}</Title>
 
       <View style={styles.imageAndInfo}>
@@ -30,7 +36,7 @@ export default function Book({ book }) {
           </View>
         </View>
       </View>
-    </View>
+    </Animated.View>
   )
 }
 

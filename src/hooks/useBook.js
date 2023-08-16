@@ -7,6 +7,11 @@ export function useBook() {
   const { mutateAsync: add, isLoading: isAdding } = useMutation(book => addToReadingList({ book }), {
     onSuccess() {
       queryClient.invalidateQueries(['reading-list'])
+    },
+    onMutate(book) {
+      queryClient.setQueryData(['reading-list'], (items) => {
+        return [...items, book]
+      })
     }
   })
 

@@ -41,5 +41,6 @@ export async function removeFromReadingList({ book }) {
 
   // throw new Error('Test remove error')
 
+  // await updateReadingList([])
   await updateReadingList(items.filter(({ title }) => title !== book.title))
 }

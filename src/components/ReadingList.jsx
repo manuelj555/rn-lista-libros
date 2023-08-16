@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { useGetReadingList } from '../hooks/useGetReadingList'
 import ReadingBook from './ReadingBook'
@@ -7,9 +7,35 @@ import Title from './ui/Title'
 export function ReadingList() {
   const { readingList, total } = useGetReadingList()
   const [selectedBook, setSelectedBook] = useState(null)
+  const selectedBookIndexRef = useRef(-1)
+  const previousScroll = useRef(0)
 
   function handleBookSelected(book) {
     setSelectedBook(book)
+    selectedBookIndexRef.current = readingList.findIndex(({ title }) => title === book?.title)
+  }
+
+  function handleScroll({ nativeEvent: { contentOffset } }) {
+    // const currentIndex = selectedBookIndexRef.current
+    // const previousY = previousScroll.current
+    // const currentY = contentOffset.y
+
+    // if (previousY > (currentY + 40)) {
+    //   selectedBookIndexRef.current = currentIndex - 1
+    //   previousScroll.current = currentY
+    // } else if (previousY < (currentY - 40)) {
+    //   selectedBookIndexRef.current = currentIndex + 1
+    //   previousScroll.current = currentY
+    // }
+
+
+    // if (selectedBookIndexRef.current < 0) {
+    //   selectedBookIndexRef.current = 0
+    // } else if (selectedBookIndexRef.current >= total) {
+    //   selectedBookIndexRef.current = total - 1
+    // }
+
+    // setSelectedBook(readingList[selectedBookIndexRef.current])
   }
 
   return (
@@ -26,6 +52,8 @@ export function ReadingList() {
             handleSelect={handleBookSelected}
           />}
           keyExtractor={book => book.title}
+          scrollEventThrottle={1000}
+          onScroll={handleScroll}
         />
       )}
       {readingList.length === 0 && (
