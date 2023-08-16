@@ -1,8 +1,17 @@
 import React from 'react'
-import { Dimensions, Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View } from 'react-native'
+import { useBook } from '../hooks/useBook'
+import { Button } from './ui/Button'
 import Title from './ui/Title'
+import { router } from 'expo-router'
 
 export default function Book({ book }) {
+  const { add } = useBook()
+
+  function addToReadingList() {
+    add(book)
+  }
+
   return (
     <View style={styles.container}>
       <Title size='sm'>{book.title}</Title>
@@ -16,6 +25,9 @@ export default function Book({ book }) {
           <Info label='Género' value={book.genre} />
           <Info label='Año' value={book.year} />
           <Info label='Author' value={book.author.name} />
+          <View style={styles.buttons}>
+            <Button size='xs' onPress={addToReadingList}>Agregar</Button>
+          </View>
         </View>
       </View>
     </View>
@@ -56,5 +68,10 @@ const styles = StyleSheet.create({
     gap: 3,
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  buttons: {
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    gap: 6
   }
 })

@@ -1,13 +1,11 @@
-import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
-import { getBooks } from '../services/books'
+import { useGetBooks } from '../hooks/useGetBooks'
 import Book from './Book'
 import Title from './ui/Title'
 
 export default function ListOfBooks() {
-  const { data: books } = useQuery(['books'], () => getBooks(), { suspense: true })
-  const booksCount = books.length
+  const { books, booksCount } = useGetBooks()
 
   return (
     <View style={styles.container}>
