@@ -14,7 +14,7 @@ export function Book ({ book }) {
   return (
     <Animated.View
       style={[styles.container]}
-      layout={SequencedTransition.duration(1200)}
+      layout={SequencedTransition.duration(500).randomDelay()}
       entering={BounceInLeft}
       exiting={FadeOut}
     >

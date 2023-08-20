@@ -1,7 +1,7 @@
 import React from 'react'
 import { Alert, Pressable, StyleSheet } from 'react-native'
 import { useBook } from '../hooks/useBook'
-import Animated, { Layout, RollOutLeft, ZoomIn } from 'react-native-reanimated'
+import Animated, { Layout, RollOutLeft, SequencedTransition, ZoomIn } from 'react-native-reanimated'
 import { useSelectBook } from '../store/useSelectedBook'
 
 export function ReadingBook ({ book, position = 0, isSelected, handleSelect }) {
@@ -29,7 +29,7 @@ export function ReadingBook ({ book, position = 0, isSelected, handleSelect }) {
       style={[styles.container]}
       entering={ZoomIn}
       exiting={RollOutLeft}
-      layout={Layout.springify().delay(700)}
+      layout={SequencedTransition.duration(400).randomDelay()}
     >
       <Pressable onPress={handleSelectBook} style={{ elevation: 20, padding: 5 }}>
         <Animated.Image resizeMode="cover" src={book.cover} style={[styles.image]}/>

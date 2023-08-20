@@ -1,65 +1,42 @@
-import React, { useRef, useState } from 'react'
-import { FlatList, StyleSheet, View } from 'react-native'
+import React, { useState } from 'react'
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { useGetReadingList } from '../hooks/useGetReadingList'
-import ReadingBook from './ReadingBook'
-import Title from './ui/Title'
+import Animated, { SlideInRight, SlideOutRight } from 'react-native-reanimated'
+import { ReadingBook } from './ReadingBook'
+import { Title } from './ui/Title'
 
-export function ReadingList() {
+export function ReadingList () {
   const { readingList, total } = useGetReadingList()
   const [selectedBook, setSelectedBook] = useState(null)
-  const selectedBookIndexRef = useRef(-1)
-  const previousScroll = useRef(0)
+  const screenWidth = Math.round(Dimensions.get('screen').width)
 
-  function handleBookSelected(book) {
+  function handleBookSelected (book) {
     setSelectedBook(book)
-    selectedBookIndexRef.current = readingList.findIndex(({ title }) => title === book?.title)
-  }
-
-  function handleScroll({ nativeEvent: { contentOffset } }) {
-    // const currentIndex = selectedBookIndexRef.current
-    // const previousY = previousScroll.current
-    // const currentY = contentOffset.y
-
-    // if (previousY > (currentY + 40)) {
-    //   selectedBookIndexRef.current = currentIndex - 1
-    //   previousScroll.current = currentY
-    // } else if (previousY < (currentY - 40)) {
-    //   selectedBookIndexRef.current = currentIndex + 1
-    //   previousScroll.current = currentY
-    // }
-
-
-    // if (selectedBookIndexRef.current < 0) {
-    //   selectedBookIndexRef.current = 0
-    // } else if (selectedBookIndexRef.current >= total) {
-    //   selectedBookIndexRef.current = total - 1
-    // }
-
-    // setSelectedBook(readingList[selectedBookIndexRef.current])
   }
 
   return (
     <View style={styles.container}>
+      <Title size="sm">Lista de lectura ({total})</Title>
       {readingList.length > 0 && (
-        <FlatList
-          ListHeaderComponent={<Title styles={{ marginLeft: 10 }}>{total} Libros</Title>}
-          data={readingList}
-          renderItem={({ item, index }) => <ReadingBook
-            key={item.title}
-            book={item}
-            position={total - index - 1}
-            isSelected={item === selectedBook}
-            handleSelect={handleBookSelected}
-          />}
-          keyExtractor={book => book.title}
-          scrollEventThrottle={1000}
-          onScroll={handleScroll}
-        />
+        <Animated.ScrollView horizontal contentContainerStyle={[
+          styles.scrollView,
+          { minWidth: screenWidth - ((styles.scrollView.padding ?? 0) * 2) },
+        ]}>
+          {readingList.map((book, index) => (
+            <ReadingBook
+              key={book.title}
+              book={book}
+              position={total - index - 1}
+              isSelected={book === selectedBook}
+              handleSelect={handleBookSelected}
+            />
+          ))}
+        </Animated.ScrollView>
       )}
       {readingList.length === 0 && (
-        <View style={{ padding: 20, flex: 1, justifyContent: 'center' }}>
-          <Title>No se han añadido libros a la lista de lectura</Title>
-        </View>
+        <Animated.View style={{ paddingVertical: 20 }} entering={SlideInRight} exiting={SlideOutRight}>
+          <Text>No hay libros en la lista de lectura</Text>
+        </Animated.View>
       )}
     </View>
   )
@@ -67,7 +44,14 @@ export function ReadingList() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    backgroundColor: '#c9f0ff',
+    margin: -20,
+    padding: 20,
+    paddingBottom: 10,
+  },
+  scrollView: {
+    gap: 10,
+    padding: 10,
   },
   title: {
     fontSize: 30,

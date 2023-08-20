@@ -23,9 +23,9 @@ export function useBook () {
       cleanSelectedBook()
       setTimeout(() => {
         queryClient.invalidateQueries(['reading-list'])
-        queryClient.setQueryData(['reading-list'], (items) => {
-          return items.filter(({ title }) => title !== book.title)
-        })
+        // queryClient.setQueryData(['reading-list'], (items) => {
+        //   return items.filter(({ title }) => title !== book.title)
+        // })
       }, 200)
     }
   })

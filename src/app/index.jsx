@@ -2,7 +2,7 @@ import { Stack } from 'expo-router'
 import React, { Suspense, useRef } from 'react'
 import { Loading } from '../components/ui/Loading'
 import { StyleSheet, View } from 'react-native'
-import { ReadingListHorizontal } from '../components/ReadingListHorizontal'
+import { ReadingList } from '../components/ReadingList'
 import { ListOfBooks } from '../components/ListOfBooks'
 import { Modal } from '../components/ui/Modal'
 import { useGetSelectedBook, useSelectBook } from '../store/useSelectedBook'
@@ -22,7 +22,7 @@ export default function Home () {
       <Stack.Screen options={{ title: 'My App de libros' }}/>
       <Suspense fallback={<Loading/>}>
         <View style={styles.container}>
-          <ReadingListHorizontal/>
+          <ReadingList/>
           <ListOfBooks/>
         </View>
       </Suspense>

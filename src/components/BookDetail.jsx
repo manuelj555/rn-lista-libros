@@ -4,7 +4,6 @@ import { useBook } from '../hooks/useBook'
 import { Button } from './ui/Button'
 import Animated from 'react-native-reanimated'
 import { Title } from './ui/Title'
-import { useSelectBook } from '../store/useSelectedBook'
 import { useGetReadingList } from '../hooks/useGetReadingList'
 
 export function BookDetail ({ book }) {
@@ -17,9 +16,7 @@ export function BookDetail ({ book }) {
   }
 
   function removeFromReadingList () {
-    setTimeout(() => {
-      remove(book)
-    }, 200)
+    remove(book)
   }
 
   return (<View style={styles.container}>
