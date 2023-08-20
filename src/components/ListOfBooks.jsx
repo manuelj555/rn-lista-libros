@@ -1,20 +1,21 @@
 import React from 'react'
-import { FlatList, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useGetBooks } from '../hooks/useGetBooks'
-import Book from './Book'
-import Title from './ui/Title'
+import Animated, { Layout } from 'react-native-reanimated'
+import { Book } from './Book'
+import { Title } from './ui/Title'
 
-export default function ListOfBooks() {
+export function ListOfBooks () {
   const { books, booksCount } = useGetBooks()
 
   return (
     <View style={styles.container}>
-      <FlatList
-        ListHeaderComponent={<Title styles={{ marginLeft: 10 }}>{booksCount} Libros disponibles</Title>}
-        data={books}
-        renderItem={({ item }) => <Book key={item.title} book={item} />}
-        keyExtractor={book => book.title}
-      />
+      <Title styles={{ marginVertical: 10 }}>{booksCount} Libros disponibles</Title>
+      <Animated.ScrollView contentContainerStyle={styles.booksContainer}>
+        {books.map(book => (
+          <Book key={book.title} book={book}/>
+        ))}
+      </Animated.ScrollView>
     </View>
   )
 }
@@ -22,8 +23,15 @@ export default function ListOfBooks() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center'
+    marginTop: 10
+  },
+  booksContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 10,
   },
   title: {
     fontSize: 30,

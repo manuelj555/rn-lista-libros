@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text } from 'react-native'
 
-export default function Title({ children: title, size = 'md', styles: extraStyles = null }) {
+export function Title({ children: title, size = 'md', styles: extraStyles = null }) {
   return (
     <Text style={[styles.title, styles[size] ?? styles.md, extraStyles]}>{title}</Text>
   )

@@ -1,62 +1,98 @@
 import React, { useState } from 'react'
-import { Pressable, StyleSheet, Text } from 'react-native'
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native'
 
-export function Button({
+export function Button ({
   children: title,
   variant = 'primary',
   size = 'sm',
-  onPress
+  onPress,
+  isLoading = false,
+  loadingText = null,
 }) {
   const [isPressed, setPressed] = useState(false)
 
   return (
     <Pressable
       onPress={onPress}
-      style={styles.container}
       onPressIn={() => setPressed(true)}
       onPressOut={() => setPressed(false)}
+      disabled={isLoading}
     >
-      <Text style={[
-        styles.text,
-        isPressed && styles.pressed,
-        styles[variant] ?? size.primary,
-        styles[size] ?? styles.sm,
+      <View style={[
+        containerStyles.container,
+        isPressed && containerStyles.pressed,
+        isLoading && containerStyles.loadingState,
+        containerStyles[variant] ?? containerStyles.primary,
+        containerStyles[size] ?? containerStyles.sm,
       ]}>
-        {title}
-      </Text>
+        {isLoading && (
+          <ActivityIndicator size="small" style={textStyles.loading}/>
+        )}
+        <Text style={[
+          textStyles.text,
+          textStyles[variant] ?? textStyles.primary,
+          textStyles[size] ?? null,
+        ]}>
+          {isLoading && loadingText ? loadingText : title}
+        </Text>
+      </View>
     </Pressable>
   )
 }
 
-
-const styles = StyleSheet.create({
+const containerStyles = StyleSheet.create({
   container: {
-  },
-  text: {
-    textAlign: 'center',
-    fontSize: 14,
+    gap: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
     borderRadius: 4,
+  },
+  loadingState: {
+    opacity: 0.8,
   },
   pressed: {
     opacity: 0.7,
   },
   primary: {
     backgroundColor: '#3273a8',
+  },
+  secondary: {
+    backgroundColor: '#a3bce6',
+  },
+  danger: {
+    backgroundColor: '#e86e6e',
+  },
+  sm: {
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+  },
+  xs: {
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+  },
+})
+
+const textStyles = StyleSheet.create({
+  text: {
+    fontSize: 14,
+    paddingVertical: 2,
+  },
+  loading: {
+    // fontSize: 14,
+  },
+  primary: {
     color: 'white',
     fontWeight: '500'
   },
   secondary: {
-    backgroundColor: '#a3bce6',
     color: '#121212',
     fontWeight: '500'
   },
-  sm: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+  danger: {
+    color: '#ffffff',
+    fontWeight: '600'
   },
   xs: {
-    paddingVertical: 6,
-    paddingHorizontal: 8,
     fontSize: 13,
   },
 })
