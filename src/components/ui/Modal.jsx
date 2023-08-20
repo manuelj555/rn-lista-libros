@@ -16,6 +16,7 @@ export function Modal ({ show, handleClose, title, children }) {
       // animationInTiming={1000}
       animationOutTiming={400}
       backdropOpacity={1}
+      backdropTransitionOutTiming={0}
       customBackdrop={
         <TouchableWithoutFeedback onPress={handleClose}>
           <BlurView intensity={20} style={styles.modalBackdrop}/>

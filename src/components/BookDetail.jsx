@@ -9,19 +9,14 @@ import { useGetReadingList } from '../hooks/useGetReadingList'
 
 export function BookDetail ({ book }) {
   const { add, isAdding, remove, isRemoving } = useBook()
-  const cleanSelectedBook = useSelectBook()
   const { readingList } = useGetReadingList()
   const isInReadingList = readingList.some(({ title }) => title === book.title)
 
   function addToReadingList () {
-    cleanSelectedBook()
-    setTimeout(() => {
-      add(book)
-    }, 200)
+    add(book)
   }
 
   function removeFromReadingList () {
-    cleanSelectedBook()
     setTimeout(() => {
       remove(book)
     }, 200)
@@ -41,11 +36,11 @@ export function BookDetail ({ book }) {
         )}
         {isInReadingList && (
           <Button
-            variant='danger'
-            size='xs'
+            variant="danger"
+            size="xs"
             onPress={removeFromReadingList}
             isLoading={isRemoving}
-            loadingText="Agregando"
+            loadingText="Quitando"
           >Quitar de la lista de lectura</Button>
         )}
       </View>

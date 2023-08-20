@@ -27,7 +27,7 @@ const delay = async (seconds) => new Promise(resolve => {
 async function updateReadingList (newData) {
   const data = JSON.stringify(newData)
 
-  // await delay(3)
+  // await delay(2)
 
   await AsyncStorage.setItem('reading-list', data)
 }
@@ -42,6 +42,8 @@ export async function addToReadingList ({ book }) {
   items.push(book)
 
   await updateReadingList(items)
+
+  return book
 }
 
 export async function removeFromReadingList ({ book }) {
@@ -55,4 +57,6 @@ export async function removeFromReadingList ({ book }) {
 
   // await updateReadingList([])
   await updateReadingList(items.filter(({ title }) => title !== book.title))
+
+  return book
 }

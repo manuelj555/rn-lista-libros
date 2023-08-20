@@ -7,26 +7,26 @@ export function useBook () {
   const cleanSelectedBook = useSelectBook()
 
   const { mutateAsync: add, isLoading: isAdding } = useMutation(book => addToReadingList({ book }), {
-    onSuccess () {
+    onSuccess (book) {
       cleanSelectedBook()
-      queryClient.invalidateQueries(['reading-list'])
-    },
-    onMutate (book) {
-      // queryClient.setQueryData(['reading-list'], (items) => {
-      //   return [...items, book]
-      // })
+      setTimeout(() => {
+        queryClient.invalidateQueries(['reading-list'])
+        queryClient.setQueryData(['reading-list'], (items) => {
+          return [...items, book]
+        })
+      }, 200)
     }
   })
 
   const { mutateAsync: remove, isLoading: isRemoving } = useMutation(book => removeFromReadingList({ book }), {
-    onSuccess () {
+    onSuccess (book) {
       cleanSelectedBook()
-      queryClient.invalidateQueries(['reading-list'])
-    },
-    onMutate (book) {
-      // queryClient.setQueryData(['reading-list'], (items) => {
-      //   return items.filter(({ title }) => title !== book.title)
-      // })
+      setTimeout(() => {
+        queryClient.invalidateQueries(['reading-list'])
+        queryClient.setQueryData(['reading-list'], (items) => {
+          return items.filter(({ title }) => title !== book.title)
+        })
+      }, 200)
     }
   })
 

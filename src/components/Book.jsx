@@ -14,7 +14,7 @@ export function Book ({ book }) {
   return (
     <Animated.View
       style={[styles.container]}
-      layout={Layout.delay(700)}
+      layout={Layout.duration(600)}
       entering={BounceInLeft}
       exiting={FadeOut}
     >
