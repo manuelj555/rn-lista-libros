@@ -1,6 +1,6 @@
 import React from 'react'
 import { Pressable, StyleSheet } from 'react-native'
-import Animated, { BounceInLeft, FadeOut, Layout } from 'react-native-reanimated'
+import Animated, { BounceInLeft, FadeOut, Layout, SequencedTransition } from 'react-native-reanimated'
 import { useSelectBook } from '../store/useSelectedBook'
 
 export function Book ({ book }) {
@@ -14,7 +14,7 @@ export function Book ({ book }) {
   return (
     <Animated.View
       style={[styles.container]}
-      layout={Layout.duration(600)}
+      layout={SequencedTransition.duration(1200)}
       entering={BounceInLeft}
       exiting={FadeOut}
     >
