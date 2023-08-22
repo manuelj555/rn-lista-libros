@@ -3,10 +3,10 @@ import { Pressable, StyleSheet } from 'react-native'
 import Animated, { BounceInLeft, FadeOut, Layout, SequencedTransition } from 'react-native-reanimated'
 import { useSelectBook } from '../store/useSelectedBook'
 
-export function Book ({ book }) {
+export function Book({ book }) {
   const selectBook = useSelectBook()
 
-  function handleSelectBook () {
+  function handleSelectBook() {
     // add(book)
     selectBook(book)
   }
@@ -19,7 +19,7 @@ export function Book ({ book }) {
       exiting={FadeOut}
     >
       <Pressable onPress={handleSelectBook}>
-        <Animated.Image sharedTransitionTag="bookImage" resizeMode="cover" src={book.cover} style={styles.image}/>
+        <Animated.Image resizeMode="cover" src={book.cover} style={styles.image} />
       </Pressable>
     </Animated.View>
   )
