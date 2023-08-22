@@ -1,40 +1,69 @@
-import React from 'react'
-import { Alert, Pressable, StyleSheet } from 'react-native'
-import { useBook } from '../hooks/useBook'
-import Animated, { Layout, RollOutLeft, SequencedTransition, ZoomIn } from 'react-native-reanimated'
+import React, { useRef } from 'react'
+import { Pressable, StyleSheet } from 'react-native'
+import Animated, {
+  RollOutLeft,
+  SequencedTransition,
+  useAnimatedGestureHandler, useAnimatedStyle,
+  useSharedValue, withSpring,
+  ZoomIn
+} from 'react-native-reanimated'
 import { useSelectBook } from '../store/useSelectedBook'
+import { PanGestureHandler } from 'react-native-gesture-handler'
 
-export function ReadingBook ({ book, position = 0, isSelected, handleSelect }) {
-  const { remove } = useBook()
+export function ReadingBook ({ book }) {
   const selectBook = useSelectBook()
+  const translateX = useSharedValue(0)
+  const translateY = useSharedValue(0)
+  const scale = useSharedValue(1)
+  const zIndex = useSharedValue(0)
 
-  function removeFromReadingList () {
-    if (position === 0 || isSelected) {
-      remove(book)
-        .catch(() => {
-          Alert.alert('Ups, an error has occured and the book cannot be removed')
-        })
-        .finally(() => handleSelect(null))
+  const containerAnimationStyles = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: translateX.value },
+        { translateY: translateY.value },
+        { scale: scale.value },
+      ],
+      zIndex: zIndex.value
     }
-  }
+  }, [translateY, translateX, zIndex])
+
+  const gestureHandler = useAnimatedGestureHandler({
+    onStart (event, context) {
+      context.initialTranslationX = event.translationX
+      context.initialTranslationY = event.translationY
+      scale.value = withSpring(1.1)
+      zIndex.value = 1000
+    },
+    onActive (event, context) {
+      translateX.value = withSpring(event.translationX + context.initialTranslationX)
+      translateY.value = withSpring(event.translationY + context.initialTranslationY)
+    },
+    onFinish () {
+      scale.value = withSpring(1)
+      translateX.value = withSpring(0)
+      translateY.value = withSpring(0)
+      zIndex.value = 0
+    }
+  })
 
   function handleSelectBook () {
     selectBook(book)
-    // remove(book)
-    // handleSelect(isSelected ? null : book)
   }
 
   return (
-    <Animated.View
-      style={[styles.container]}
-      entering={ZoomIn}
-      exiting={RollOutLeft}
-      layout={SequencedTransition.duration(400).randomDelay()}
-    >
-      <Pressable onPress={handleSelectBook} style={{ elevation: 20, padding: 5 }}>
-        <Animated.Image resizeMode="cover" src={book.cover} style={[styles.image]}/>
-      </Pressable>
-    </Animated.View>
+    <PanGestureHandler onGestureEvent={gestureHandler}>
+      <Animated.View
+        style={[styles.container, containerAnimationStyles]}
+        entering={ZoomIn}
+        exiting={RollOutLeft}
+        layout={SequencedTransition.duration(400).randomDelay()}
+      >
+        <Pressable onPress={handleSelectBook} style={{ elevation: 20, padding: 5 }}>
+          <Animated.Image resizeMode="cover" src={book.cover} style={[styles.image]}/>
+        </Pressable>
+      </Animated.View>
+    </PanGestureHandler>
   )
 }
 

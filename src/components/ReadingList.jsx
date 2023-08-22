@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { useGetReadingList } from '../hooks/useGetReadingList'
 import Animated, { SlideInRight, SlideOutRight } from 'react-native-reanimated'
@@ -7,12 +7,7 @@ import { Title } from './ui/Title'
 
 export function ReadingList () {
   const { readingList, total } = useGetReadingList()
-  const [selectedBook, setSelectedBook] = useState(null)
   const screenWidth = Math.round(Dimensions.get('screen').width)
-
-  function handleBookSelected (book) {
-    setSelectedBook(book)
-  }
 
   return (
     <View style={styles.container}>
@@ -22,14 +17,8 @@ export function ReadingList () {
           styles.scrollView,
           { minWidth: screenWidth - ((styles.scrollView.padding ?? 0) * 2) },
         ]}>
-          {readingList.map((book, index) => (
-            <ReadingBook
-              key={book.title}
-              book={book}
-              position={total - index - 1}
-              isSelected={book === selectedBook}
-              handleSelect={handleBookSelected}
-            />
+          {readingList.map((book) => (
+            <ReadingBook key={book.title} book={book}/>
           ))}
         </Animated.ScrollView>
       )}
