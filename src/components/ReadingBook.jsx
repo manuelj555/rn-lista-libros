@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import { Image, Pressable, StyleSheet, View } from 'react-native'
 import Animated, {
+  Layout,
   RollOutLeft,
   SequencedTransition,
   useAnimatedGestureHandler, useAnimatedStyle,
@@ -52,19 +53,19 @@ export function ReadingBook({ book }) {
   }
 
   return (
-    // <PanGestureHandler onGestureEvent={gestureHandler}>
-    <View
-      // style={[styles.container, containerAnimationStyles]}
-      style={[styles.container]}
-    // entering={ZoomIn}
-    // exiting={RollOutLeft}
-    // layout={SequencedTransition.duration(400).randomDelay()}
-    >
-      <Pressable onPress={handleSelectBook} style={{ elevation: 20, padding: 5 }}>
-        <Image resizeMode="cover" src={book.cover} style={[styles.image]} />
-      </Pressable>
-    </View>
-    // </PanGestureHandler>
+    <PanGestureHandler onGestureEvent={gestureHandler}>
+      <Animated.View
+        style={[styles.container, containerAnimationStyles]}
+        entering={ZoomIn}
+        exiting={RollOutLeft}
+        layout={Layout.duration(400)}
+      // layout={SequencedTransition.duration(400).randomDelay()}
+      >
+        <Pressable onPress={handleSelectBook} style={{ elevation: 20, padding: 5 }}>
+          <Image resizeMode="cover" src={book.cover} style={[styles.image]} />
+        </Pressable>
+      </Animated.View>
+    </PanGestureHandler>
   )
 }
 

@@ -5,7 +5,7 @@ import Animated, { SlideInRight, SlideOutRight } from 'react-native-reanimated'
 import { ReadingBook } from './ReadingBook'
 import { Title } from './ui/Title'
 
-export function ReadingList () {
+export function ReadingList() {
   const { readingList, total } = useGetReadingList()
   const screenWidth = Math.round(Dimensions.get('screen').width)
 
@@ -18,7 +18,7 @@ export function ReadingList () {
           { minWidth: screenWidth - ((styles.scrollView.padding ?? 0) * 2) },
         ]}>
           {readingList.map((book) => (
-            <ReadingBook key={book.title} book={book}/>
+            <ReadingBook key={book.title} book={book} />
           ))}
         </Animated.ScrollView>
       )}

@@ -74,7 +74,7 @@ export function ListOfBooks() {
         <Title size='xs'>Probando animated View 3</Title>
 
         {books.map(book => (
-          <Animated.View layout={SequencedTransition.randomDelay()} key={book.title} style={{
+          <Animated.View layout={Layout.duration(500)} key={book.title} style={{
             borderWidth: 2,
             borderColor: 'green',
             padding: 10,
