@@ -14,7 +14,7 @@ export function Book({ book }) {
   return (
     <Animated.View
       style={[styles.container]}
-      layout={Layout.springify()}
+      // layout={Layout.springify()}
       entering={BounceInLeft}
       exiting={FadeOut}
     >

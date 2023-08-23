@@ -58,7 +58,7 @@ export function ReadingBook({ book }) {
         style={[styles.container, containerAnimationStyles]}
         entering={ZoomIn}
         exiting={RollOutLeft}
-        layout={Layout.duration(400)}
+      // layout={Layout.duration(400)}
       // layout={SequencedTransition.duration(400).randomDelay()}
       >
         <Pressable onPress={handleSelectBook} style={{ elevation: 20, padding: 5 }}>
