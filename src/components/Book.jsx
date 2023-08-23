@@ -1,5 +1,5 @@
 import React from 'react'
-import { Pressable, StyleSheet } from 'react-native'
+import { Image, Pressable, StyleSheet } from 'react-native'
 import Animated, { BounceInLeft, FadeOut, Layout, SequencedTransition } from 'react-native-reanimated'
 import { useSelectBook } from '../store/useSelectedBook'
 
@@ -19,7 +19,7 @@ export function Book({ book }) {
       exiting={FadeOut}
     >
       <Pressable onPress={handleSelectBook}>
-        <Animated.Image resizeMode="cover" src={book.cover} style={styles.image} />
+        <Image resizeMode="cover" src={book.cover} style={styles.image} />
       </Pressable>
     </Animated.View>
   )

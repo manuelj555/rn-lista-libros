@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { Pressable, StyleSheet } from 'react-native'
+import { Image, Pressable, StyleSheet, View } from 'react-native'
 import Animated, {
   RollOutLeft,
   SequencedTransition,
@@ -10,7 +10,7 @@ import Animated, {
 import { useSelectBook } from '../store/useSelectedBook'
 import { PanGestureHandler } from 'react-native-gesture-handler'
 
-export function ReadingBook ({ book }) {
+export function ReadingBook({ book }) {
   const selectBook = useSelectBook()
   const translateX = useSharedValue(0)
   const translateY = useSharedValue(0)
@@ -29,17 +29,17 @@ export function ReadingBook ({ book }) {
   }, [translateY, translateX, zIndex])
 
   const gestureHandler = useAnimatedGestureHandler({
-    onStart (event, context) {
+    onStart(event, context) {
       context.initialTranslationX = event.translationX
       context.initialTranslationY = event.translationY
       scale.value = withSpring(1.1)
       zIndex.value = 1000
     },
-    onActive (event, context) {
+    onActive(event, context) {
       translateX.value = withSpring(event.translationX + context.initialTranslationX)
       translateY.value = withSpring(event.translationY + context.initialTranslationY)
     },
-    onFinish () {
+    onFinish() {
       scale.value = withSpring(1)
       translateX.value = withSpring(0)
       translateY.value = withSpring(0)
@@ -47,23 +47,24 @@ export function ReadingBook ({ book }) {
     }
   })
 
-  function handleSelectBook () {
+  function handleSelectBook() {
     selectBook(book)
   }
 
   return (
-    <PanGestureHandler onGestureEvent={gestureHandler}>
-      <Animated.View
-        style={[styles.container, containerAnimationStyles]}
-        entering={ZoomIn}
-        exiting={RollOutLeft}
-        layout={SequencedTransition.duration(400).randomDelay()}
-      >
-        <Pressable onPress={handleSelectBook} style={{ elevation: 20, padding: 5 }}>
-          <Animated.Image resizeMode="cover" src={book.cover} style={[styles.image]}/>
-        </Pressable>
-      </Animated.View>
-    </PanGestureHandler>
+    // <PanGestureHandler onGestureEvent={gestureHandler}>
+    <View
+      // style={[styles.container, containerAnimationStyles]}
+      style={[styles.container]}
+    // entering={ZoomIn}
+    // exiting={RollOutLeft}
+    // layout={SequencedTransition.duration(400).randomDelay()}
+    >
+      <Pressable onPress={handleSelectBook} style={{ elevation: 20, padding: 5 }}>
+        <Image resizeMode="cover" src={book.cover} style={[styles.image]} />
+      </Pressable>
+    </View>
+    // </PanGestureHandler>
   )
 }
 
