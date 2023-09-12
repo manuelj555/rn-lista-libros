@@ -1,14 +1,14 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { ScrollView as RNScrollView } from 'react-native'
 import { styled } from 'nativewind'
 import Animated from 'react-native-reanimated'
 
-function ScrollViewWrapper ({ containerClassName, contentContainerStyle, showScroll, ...props }) {
-  return <RNScrollView contentContainerStyle={[
+const ScrollViewWrapper = forwardRef(({ containerClassName, contentContainerStyle, showScroll, ...props }, ref) => {
+  return <RNScrollView ref={ref} contentContainerStyle={[
     containerClassName,
     contentContainerStyle,
-  ]} {...props} showsVerticalScrollIndicator={showScroll} showsHorizontalScrollIndicator={showScroll} />
-}
+  ]} {...props} showsVerticalScrollIndicator={showScroll} showsHorizontalScrollIndicator={showScroll}/>
+})
 
 export const ScrollView = styled(ScrollViewWrapper, {
   props: {

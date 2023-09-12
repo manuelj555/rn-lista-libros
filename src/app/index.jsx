@@ -7,6 +7,7 @@ import { ListOfBooks } from '../components/ListOfBooks'
 import { Modal } from '../components/ui/Modal'
 import { useGetSelectedBook, useSelectBook } from '../store/useSelectedBook'
 import { BookDetail } from '../components/BookDetail'
+import { AppBottomSheet } from '../components/ui/AppBottonSheet'
 
 export default function Home () {
   const selectedBook = useGetSelectedBook()
@@ -26,9 +27,9 @@ export default function Home () {
           <ListOfBooks/>
         </View>
       </Suspense>
-      <Modal show={!!selectedBook} title={selectedBook?.title} handleClose={() => unselectBook()}>
+      <AppBottomSheet show={!!selectedBook} title={selectedBook?.title} handleClose={() => unselectBook()}>
         {lastSelectedBookRef.current && <BookDetail book={lastSelectedBookRef.current}/>}
-      </Modal>
+      </AppBottomSheet>
     </>
   )
 }
