@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
 import { Title } from './Title'
-import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet'
 import { ScrollView } from './ScrollView'
 import { BlurView } from 'expo-blur'
 import Animated, { FadeIn, FadeOut, useSharedValue, withTiming } from 'react-native-reanimated'
@@ -27,7 +27,6 @@ export function AppBottomSheet ({ show, handleClose, title, children }) {
       ref={$modal}
       snapPoints={[contentHeight, '90%']}
       onDismiss={() => handleClose()}
-      className="bg-red-400"
       style={styles.modal}
       backdropComponent={Backdrop}
     >
@@ -46,11 +45,17 @@ export function AppBottomSheet ({ show, handleClose, title, children }) {
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView)
 
 function Backdrop ({ animatedIndex, animatedPosition, ...props }) {
-  return <AnimatedBlurView
-    intensity={10}
-    entering={FadeIn}
-    exiting={FadeOut.duration(100)}
-    {...props}/>
+  const { dismiss } = useBottomSheetModal()
+
+  return (
+    <TouchableWithoutFeedback onPress={() => dismiss()}>
+      <AnimatedBlurView
+        intensity={10}
+        entering={FadeIn}
+        exiting={FadeOut.duration(100)}
+        {...props}/>
+    </TouchableWithoutFeedback>
+  )
 }
 
 const styles = StyleSheet.create({

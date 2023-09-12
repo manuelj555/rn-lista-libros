@@ -9,49 +9,33 @@ export function Button ({
   isLoading = false,
   loadingText = null,
 }) {
-  const [isPressed, setPressed] = useState(false)
-
   return (
     <Pressable
       onPress={onPress}
-      onPressIn={() => setPressed(true)}
-      onPressOut={() => setPressed(false)}
       disabled={isLoading}
+      className={`flex-row items-center rounded active:opacity-70`} style={[
+      { gap: 2 },
+      isLoading && containerStyles.loadingState,
+      containerStyles[variant] ?? containerStyles.primary,
+      containerStyles[size] ?? containerStyles.sm,
+    ]}
     >
-      <View style={[
-        containerStyles.container,
-        isPressed && containerStyles.pressed,
-        isLoading && containerStyles.loadingState,
-        containerStyles[variant] ?? containerStyles.primary,
-        containerStyles[size] ?? containerStyles.sm,
+      {isLoading && (
+        <ActivityIndicator size="small"/>
+      )}
+      <Text className='py-[2px] text-sm' style={[
+        textStyles[variant] ?? textStyles.primary,
+        textStyles[size] ?? null,
       ]}>
-        {isLoading && (
-          <ActivityIndicator size="small" style={textStyles.loading}/>
-        )}
-        <Text style={[
-          textStyles.text,
-          textStyles[variant] ?? textStyles.primary,
-          textStyles[size] ?? null,
-        ]}>
-          {isLoading && loadingText ? loadingText : title}
-        </Text>
-      </View>
+        {isLoading && loadingText ? loadingText : title}
+      </Text>
     </Pressable>
   )
 }
 
 const containerStyles = StyleSheet.create({
-  container: {
-    gap: 2,
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 4,
-  },
   loadingState: {
     opacity: 0.8,
-  },
-  pressed: {
-    opacity: 0.7,
   },
   primary: {
     backgroundColor: '#3273a8',
@@ -73,13 +57,6 @@ const containerStyles = StyleSheet.create({
 })
 
 const textStyles = StyleSheet.create({
-  text: {
-    fontSize: 14,
-    paddingVertical: 2,
-  },
-  loading: {
-    // fontSize: 14,
-  },
   primary: {
     color: 'white',
     fontWeight: '500'

@@ -1,8 +1,8 @@
 import React from 'react'
-import { Image, Pressable, StyleSheet } from 'react-native'
+import { Image, Pressable } from 'react-native'
 import Animated, {
-  Layout,
-  RollOutLeft, SequencedTransition,
+  RollOutLeft,
+  SequencedTransition,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -30,7 +30,7 @@ export function ReadingBook ({ book }) {
     }
   }, [translateY, translateX, zIndex])
 
-  const gestureHandler2 = Gesture.Pan()
+  const gestureHandler = Gesture.Pan()
     .onStart(event => {
       // context.initialTranslationX = event.translationX
       // context.initialTranslationY = event.translationY
@@ -53,48 +53,18 @@ export function ReadingBook ({ book }) {
   }
 
   return (
-    <GestureDetector gesture={gestureHandler2}>
+    <GestureDetector gesture={gestureHandler}>
       <Animated.View
-        style={[styles.container, containerAnimationStyles]}
+        className="self-center items-start relative"
+        style={[containerAnimationStyles]}
         entering={ZoomIn}
         exiting={RollOutLeft}
-        // layout={Layout.duration(400)}
         layout={SequencedTransition.duration(400).randomDelay()}
       >
         <Pressable onPress={handleSelectBook} style={{ elevation: 20, padding: 5 }}>
-          <Image resizeMode="cover" style={[styles.image]} source={{ uri: book.cover }}/>
+          <Image className="w-[60px] h-[100px] rounded-md z-1" resizeMode="cover" source={{ uri: book.cover }}/>
         </Pressable>
       </Animated.View>
     </GestureDetector>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignSelf: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    position: 'relative',
-    // width: 300,
-    margin: 'auto',
-    // borderWidth: 1,
-  },
-  image: {
-    width: 60,
-    height: 100,
-    borderRadius: 6,
-    zIndex: 1,
-  },
-  removeButton: {
-    zIndex: 10,
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    borderWidth: 2,
-    borderColor: '#78504d',
-    borderRadius: 4,
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    backgroundColor: '#66666622',
-  }
-})
