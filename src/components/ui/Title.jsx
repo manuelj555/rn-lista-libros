@@ -1,24 +1,16 @@
 import React from 'react'
-import { StyleSheet, Text } from 'react-native'
+import { Text } from 'react-native'
 
-export function Title({ children: title, size = 'md', styles: extraStyles = null }) {
+export function Title ({ children: title, size = 'md', style }) {
   return (
-    <Text style={[styles.title, styles[size] ?? styles.md, extraStyles]}>{title}</Text>
+    <Text className={`font-bold flex-shrink ${sizes[size] ?? size.md}`} style={style}>
+      {title}
+    </Text>
   )
 }
 
-const styles = StyleSheet.create({
-  title: {
-    fontWeight: 'bold',
-    flexShrink: 1,
-  },
-  md: {
-    fontSize: 30,
-  },
-  sm: {
-    fontSize: 20,
-  },
-  xs: {
-    fontSize: 16,
-  },
-})
+const sizes = {
+  md: 'text-3xl',
+  sm: 'text-xl',
+  xs: '',
+}

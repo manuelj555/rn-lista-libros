@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router'
 import React, { Suspense, useRef } from 'react'
 import { Loading } from '../components/ui/Loading'
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import { ReadingList } from '../components/ReadingList'
 import { ListOfBooks } from '../components/ListOfBooks'
 import { Modal } from '../components/ui/Modal'
@@ -21,7 +21,7 @@ export default function Home () {
     <>
       <Stack.Screen options={{ title: 'My App de libros' }}/>
       <Suspense fallback={<Loading/>}>
-        <View style={styles.container}>
+        <View className="flex-1 pt-[10px] px-[20px]">
           <ReadingList/>
           <ListOfBooks/>
         </View>
@@ -32,11 +32,3 @@ export default function Home () {
     </>
   )
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    paddingHorizontal: 20,
-    paddingTop: 10,
-  },
-})

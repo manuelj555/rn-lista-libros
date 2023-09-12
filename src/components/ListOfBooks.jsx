@@ -1,41 +1,27 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
-import Animated from 'react-native-reanimated'
+import { View } from 'react-native'
 import { useGetBooks } from '../hooks/useGetBooks'
 import { Book } from './Book'
 import { Title } from './ui/Title'
+import { AnimatedScrollView } from './ui/ScrollView'
 
-export function ListOfBooks() {
+export function ListOfBooks () {
   const { books, booksCount } = useGetBooks()
 
   return (
-    <View style={styles.container}>
-      <Title styles={{ marginVertical: 10 }}>{booksCount} Libros disponibles</Title>
+    <View className="flex-1 mt-4">
+      <Title className="my-2">{booksCount} Libros disponibles</Title>
 
-      <Animated.ScrollView contentContainerStyle={styles.booksContainer}>
+      <AnimatedScrollView
+        showScroll={false}
+        containerClassName="flex-row flex-wrap items-center justify-between p-2"
+        contentContainerStyle={{
+          gap: 10,
+        }}>
         {books.map(book => (
-          <Book key={book.title} book={book} />
+          <Book key={book.title} book={book}/>
         ))}
-      </Animated.ScrollView>
+      </AnimatedScrollView>
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 10
-  },
-  booksContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 10,
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-  }
-})
