@@ -1,17 +1,18 @@
-import React, { useRef } from 'react'
-import { Image, Pressable, StyleSheet, View } from 'react-native'
+import React from 'react'
+import { Image, Pressable, StyleSheet } from 'react-native'
 import Animated, {
   Layout,
-  RollOutLeft,
-  SequencedTransition,
-  useAnimatedGestureHandler, useAnimatedStyle,
-  useSharedValue, withSpring,
+  RollOutLeft, SequencedTransition,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
   ZoomIn
 } from 'react-native-reanimated'
 import { useSelectBook } from '../store/useSelectedBook'
-import { PanGestureHandler } from 'react-native-gesture-handler'
+import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 
-export function ReadingBook({ book }) {
+export function ReadingBook ({ book }) {
   const selectBook = useSelectBook()
   const translateX = useSharedValue(0)
   const translateY = useSharedValue(0)
@@ -29,43 +30,42 @@ export function ReadingBook({ book }) {
     }
   }, [translateY, translateX, zIndex])
 
-  const gestureHandler = useAnimatedGestureHandler({
-    onStart(event, context) {
-      context.initialTranslationX = event.translationX
-      context.initialTranslationY = event.translationY
+  const gestureHandler2 = Gesture.Pan()
+    .onStart(event => {
+      // context.initialTranslationX = event.translationX
+      // context.initialTranslationY = event.translationY
       scale.value = withSpring(1.1)
       zIndex.value = 1000
-    },
-    onActive(event, context) {
-      translateX.value = withSpring(event.translationX + context.initialTranslationX)
-      translateY.value = withSpring(event.translationY + context.initialTranslationY)
-    },
-    onFinish() {
+    })
+    .onUpdate(event => {
+      translateX.value = withSpring(event.translationX)
+      translateY.value = withSpring(event.translationY)
+    })
+    .onEnd(() => {
       scale.value = withSpring(1)
       translateX.value = withSpring(0)
       translateY.value = withSpring(0)
-      zIndex.value = 0
-    }
-  })
+      zIndex.value = withTiming(0)
+    })
 
-  function handleSelectBook() {
+  function handleSelectBook () {
     selectBook(book)
   }
 
   return (
-    <PanGestureHandler onGestureEvent={gestureHandler}>
+    <GestureDetector gesture={gestureHandler2}>
       <Animated.View
         style={[styles.container, containerAnimationStyles]}
         entering={ZoomIn}
         exiting={RollOutLeft}
-      // layout={Layout.duration(400)}
-      // layout={SequencedTransition.duration(400).randomDelay()}
+        // layout={Layout.duration(400)}
+        layout={SequencedTransition.duration(400).randomDelay()}
       >
         <Pressable onPress={handleSelectBook} style={{ elevation: 20, padding: 5 }}>
-          <Image resizeMode="cover" src={book.cover} style={[styles.image]} />
+          <Image resizeMode="cover" style={[styles.image]} source={{ uri: book.cover }}/>
         </Pressable>
       </Animated.View>
-    </PanGestureHandler>
+    </GestureDetector>
   )
 }
 

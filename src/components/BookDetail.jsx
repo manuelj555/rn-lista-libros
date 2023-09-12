@@ -20,7 +20,7 @@ export function BookDetail ({ book }) {
   }
 
   return (<View style={styles.container}>
-    <Animated.Image resizeMode="cover" src={book.cover} style={styles.image}/>
+    <Animated.Image resizeMode="cover" source={{ uri: book.cover }} style={styles.image}/>
 
     <View style={styles.infoContainer}>
       <View style={styles.buttons}>

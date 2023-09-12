@@ -3,9 +3,28 @@ import { Pressable, StyleSheet, Text, TouchableWithoutFeedback, View } from 'rea
 import ReactNativeModal from 'react-native-modal'
 import { BlurView } from 'expo-blur'
 import { Title } from './Title'
-import Animated from 'react-native-reanimated'
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 
 export function Modal ({ show, handleClose, title, children }) {
+  const translatedHeight = useSharedValue(0)
+  const initialContentHeight = useSharedValue(0)
+  const gestureHandler = Gesture.Pan()
+    .onUpdate(event => {
+      // translatedHeight.value = withSpring(event.translationY * -1)
+      translatedHeight.value = (event.translationY * -1)
+    })
+
+  const contentStyles = useAnimatedStyle(() => {
+    return {
+      height: initialContentHeight.value > 0 ? (initialContentHeight.value + translatedHeight.value) : 'auto',
+    }
+  })
+
+  function onLayout (event) {
+    initialContentHeight.value = event.nativeEvent.layout.height
+  }
+
   return (
     <ReactNativeModal
       isVisible={show}
@@ -13,7 +32,7 @@ export function Modal ({ show, handleClose, title, children }) {
       onBackdropPress={handleClose}
       animationIn="slideInUp"
       animationOut="slideOutDown"
-      // animationInTiming={1000}
+      animationInTiming={400}
       animationOutTiming={400}
       backdropOpacity={1}
       backdropTransitionOutTiming={0}
@@ -26,17 +45,19 @@ export function Modal ({ show, handleClose, title, children }) {
       onSwipeComplete={handleClose}
       style={styles.modalContainer}
     >
-      <View style={styles.modal}>
-        <View style={styles.header}>
-          <Title styles={{ padding: 10 }}>{title}</Title>
-          <Pressable onPress={handleClose}>
-            <Text style={styles.close}>x</Text>
-          </Pressable>
-        </View>
-        <Animated.ScrollView contentContainerStyle={{ paddingHorizontal: 10 }}>
-          {children}
-        </Animated.ScrollView>
-      </View>
+      <GestureDetector gesture={gestureHandler}>
+        <Animated.View style={[styles.modal, contentStyles]} onLayout={onLayout}>
+          <View style={styles.header}>
+            <Title styles={{ padding: 10 }}>{title}</Title>
+            <Pressable onPress={handleClose}>
+              <Text style={styles.close}>x</Text>
+            </Pressable>
+          </View>
+          <Animated.ScrollView contentContainerStyle={{ paddingHorizontal: 10 }}>
+            {children}
+          </Animated.ScrollView>
+        </Animated.View>
+      </GestureDetector>
     </ReactNativeModal>
   )
 }
