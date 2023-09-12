@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 import { useBook } from '../hooks/useBook'
 import { Button } from './ui/Button'
 import Animated from 'react-native-reanimated'
@@ -19,75 +19,44 @@ export function BookDetail ({ book }) {
     remove(book)
   }
 
-  return (<View style={styles.container}>
-    <Animated.Image resizeMode="cover" source={{ uri: book.cover }} style={styles.image}/>
+  return (
+    <View style={{ gap: 10 }} className="py-5 items-start flex-row justify-between">
+      <Animated.Image resizeMode="cover" source={{ uri: book.cover }} className="mt-0 w-[160px] h-[260px]"/>
 
-    <View style={styles.infoContainer}>
-      <View style={styles.buttons}>
-        {!isInReadingList && (
-          <Button
-            onPress={addToReadingList}
-            isLoading={isAdding}
-            loadingText="Agregando"
-          >Agregar</Button>
-        )}
-        {isInReadingList && (
-          <Button
-            variant="danger"
-            size="xs"
-            onPress={removeFromReadingList}
-            isLoading={isRemoving}
-            loadingText="Quitando"
-          >Quitar de la lista de lectura</Button>
-        )}
+      <View style={{ gap: 6 }} className="flex-1">
+        <View className="justify-center items-end mb-2" style={{ gap: 4 }}>
+          {!isInReadingList && (
+            <Button
+              onPress={addToReadingList}
+              isLoading={isAdding}
+              loadingText="Agregando"
+            >Agregar</Button>
+          )}
+          {isInReadingList && (
+            <Button
+              variant="danger"
+              size="xs"
+              onPress={removeFromReadingList}
+              isLoading={isRemoving}
+              loadingText="Quitando"
+            >Quitar de la lista de lectura</Button>
+          )}
+        </View>
+        <Text>{book.synopsis}</Text>
+        <Info label="Páginas" value={book.pages}/>
+        <Info label="Género" value={book.genre}/>
+        <Info label="Año" value={book.year}/>
+        <Info label="Author" value={book.author.name}/>
       </View>
-      <Text>{book.synopsis}</Text>
-      <Info label="Páginas" value={book.pages}/>
-      <Info label="Género" value={book.genre}/>
-      <Info label="Año" value={book.year}/>
-      <Info label="Author" value={book.author.name}/>
     </View>
-  </View>)
+  )
 }
 
 function Info ({ label, value }) {
-  return (<View style={styles.infoItem}>
-    <Title size="xs">{label}:</Title>
-    <Text>{value}</Text>
-  </View>)
+  return (
+    <View style={{ gap: 3 }} className="flex-row items-center justify-between">
+      <Title size="xs">{label}:</Title>
+      <Text>{value}</Text>
+    </View>
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    // overflow: 'scroll',
-    paddingVertical: 20,
-    alignItems: 'flex-start',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 10,
-  },
-  infoContainer: {
-    flexDirection: 'column',
-    gap: 6,
-    flex: 1,
-  },
-  image: {
-    marginTop: 0,
-    width: 160,
-    height: 260,
-  },
-  infoItem: {
-    flexDirection: 'row',
-    gap: 3,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  buttons: {
-    flexDirection: 'column',
-    // flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    gap: 4,
-    marginBottom: 10,
-  }
-})
